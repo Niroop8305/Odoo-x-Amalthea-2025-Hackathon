@@ -49,6 +49,58 @@ export const User = {
     return rows;
   },
 
+  // Get all users with full profile information
+  findAllWithProfiles: async () => {
+    const [rows] = await pool.query(`
+      SELECT 
+        u.user_id,
+        u.email,
+        u.is_active,
+        u.last_login,
+        u.created_at,
+        r.role_name,
+        ep.employee_code,
+        ep.company_name,
+        ep.first_name,
+        ep.last_name,
+        CONCAT(ep.first_name, ' ', COALESCE(ep.last_name, '')) as full_name,
+        ep.phone,
+        ep.department,
+        ep.designation,
+        ep.date_of_joining
+      FROM users u
+      INNER JOIN roles r ON u.role_id = r.role_id
+      LEFT JOIN employee_profiles ep ON u.user_id = ep.user_id
+      ORDER BY u.created_at DESC
+    `);
+    return rows;
+  },
+
+  // Find user by ID with profile
+  findByIdWithProfile: async (userId) => {
+    const [rows] = await pool.query(`
+      SELECT 
+        u.user_id,
+        u.email,
+        u.is_active,
+        u.last_login,
+        u.created_at,
+        r.role_name,
+        ep.*
+      FROM users u
+      INNER JOIN roles r ON u.role_id = r.role_id
+      LEFT JOIN employee_profiles ep ON u.user_id = ep.user_id
+      WHERE u.user_id = ?
+    `, [userId]);
+    return rows[0];
+  },
+
+  // Delete user
+  delete: async (userId) => {
+    // Foreign key constraints will handle cascade delete of profile
+    await pool.query('DELETE FROM users WHERE user_id = ?', [userId]);
+  },
+
   // Update user status
   updateStatus: async (userId, isActive) => {
     await pool.query("UPDATE users SET is_active = ? WHERE user_id = ?", [

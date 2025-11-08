@@ -1,27 +1,27 @@
 import express from 'express';
 import { protect, authorize } from '../middleware/auth.js';
+import { 
+  createUser, 
+  getAllUsers, 
+  getUserById, 
+  deleteUser 
+} from '../controllers/userController.js';
 import { User } from '../models/userModel.js';
 import { EmployeeProfile } from '../models/profileModel.js';
 
 const router = express.Router();
 
-// Get all users (Admin/HR only)
-router.get('/', protect, authorize('Admin', 'HR Officer'), async (req, res) => {
-  try {
-    const users = await User.findAll();
-    res.status(200).json({
-      success: true,
-      count: users.length,
-      data: users
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: 'Error fetching users',
-      error: error.message
-    });
-  }
-});
+// Create new user (Admin only)
+router.post('/create', protect, authorize('Admin'), createUser);
+
+// Get all users with profiles (Admin/HR only)
+router.get('/', protect, authorize('Admin', 'HR Manager'), getAllUsers);
+
+// Get user by ID
+router.get('/:id', protect, getUserById);
+
+// Delete user (Admin only)
+router.delete('/:id', protect, authorize('Admin'), deleteUser);
 
 // Get user profile
 router.get('/profile/:userId', protect, async (req, res) => {

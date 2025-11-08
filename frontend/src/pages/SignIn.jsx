@@ -61,9 +61,12 @@ const SignIn = () => {
     <div className="auth-page">
       <div className="auth-card">
         <div className="auth-logo">
-          <div className="auth-logo-box">
-            <div className="auth-logo-text">WORKZEN</div>
-          </div>
+          <img 
+            src="/odoo-logo.svg" 
+            alt="Odoo Logo" 
+            className="auth-logo-image"
+          />
+          <div className="auth-logo-subtitle">Powered by Odoo India</div>
         </div>
 
         <h2 className="auth-title">Login ID/Email :-</h2>

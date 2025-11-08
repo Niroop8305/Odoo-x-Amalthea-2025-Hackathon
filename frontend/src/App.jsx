@@ -1,20 +1,17 @@
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Navigate,
-} from "react-router-dom";
-import { AuthProvider } from "./context/AuthContext";
-import ProtectedRoute from "./components/ProtectedRoute";
-import SignIn from "./pages/SignIn";
-import SignUp from "./pages/SignUp";
-import Dashboard from "./pages/Dashboard";
-import MyProfile from "./pages/MyProfile";
-import "./styles/App.css";
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider } from './context/AuthContext';
+import ProtectedRoute from './components/ProtectedRoute';
+import SignIn from './pages/SignIn';
+import SignUp from './pages/SignUp';
+import Dashboard from './pages/Dashboard';
+import MyProfile from './pages/MyProfile';
+import Attendance from './pages/Attendance';
+import EmployeeAttendance from './pages/EmployeeAttendance';
+import './styles/App.css';
 
 function App() {
   return (
-    <Router>
+    <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
       <AuthProvider>
         <div className="app-container">
           <Routes>
@@ -54,6 +51,40 @@ function App() {
               }
             />
 
+            {/* Attendance Route */}
+            <Route
+              path="/attendance"
+              element={
+                <ProtectedRoute>
+                  <Attendance />
+                </ProtectedRoute>
+              }
+            />
+
+            {/* Employee Attendance Route - Monthly View */}
+            <Route
+              path="/employee/attendance"
+              element={
+                <ProtectedRoute>
+                  <EmployeeAttendance />
+                </ProtectedRoute>
+              }
+            />
+
+            {/* Unauthorized Page */}
+            <Route 
+              path="/unauthorized" 
+              element={
+                <div className="auth-page">
+                  <div className="auth-card text-center">
+                    <h1 style={{ fontSize: '72px', color: 'var(--odoo-purple)' }}>403</h1>
+                    <p style={{ fontSize: '20px', marginBottom: '20px' }}>Access Denied</p>
+                    <p style={{ color: '#999', marginBottom: '30px' }}>You don't have permission to access this page.</p>
+                    <a href="/login" className="btn btn-primary">Go to Login</a>
+                  </div>
+                </div>
+              } 
+            />
             {/* 404 Page */}
             <Route
               path="*"

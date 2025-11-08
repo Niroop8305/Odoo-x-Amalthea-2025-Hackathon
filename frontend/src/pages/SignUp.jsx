@@ -8,8 +8,9 @@ const SignUp = () => {
   const { register } = useAuth();
   
   const [formData, setFormData] = useState({
-    company_name: '',
+    company_name: 'Odoo India',
     first_name: '',
+    last_name: '',
     email: '',
     phone: '',
     password: '',
@@ -86,9 +87,12 @@ const SignUp = () => {
     <div className="auth-page">
       <div className="auth-card">
         <div className="auth-logo">
-          <div className="auth-logo-box">
-            <div className="auth-logo-text">WORKZEN</div>
-          </div>
+          <img 
+            src="/odoo-logo.svg" 
+            alt="Odoo Logo" 
+            className="auth-logo-image"
+          />
+          <div className="auth-logo-subtitle">Powered by Odoo India</div>
         </div>
 
         <h2 className="auth-title">Company Name :-</h2>

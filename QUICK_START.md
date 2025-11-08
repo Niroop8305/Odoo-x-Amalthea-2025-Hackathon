@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Quick Start - My Profile Feature
 
 ## 🚀 Quick Setup (3 Steps)
@@ -29,86 +30,70 @@ SET skills = JSON_ARRAY(),
     certifications = JSON_ARRAY()
 WHERE skills IS NULL OR certifications IS NULL;
 ```
+# Quick Start - WorkZen
 
-### Step 2: Start Backend
+This quick start covers both the My Profile feature and the Attendance feature so you can get the latest code running locally.
+
+## Prerequisites
+- MySQL running and accessible
+- Node.js (>= 18) and npm installed
+
+## 1) Database Migrations
+
+If you're testing the My Profile feature, apply the resume migration:
 
 ```powershell
-# From backend directory
-npm start
-# Backend should be running on http://localhost:5000
+cd backend
+mysql -u root -p workzen_hrms < src/database/add_resume_fields.sql
 ```
 
-### Step 3: Start Frontend
+If you're testing Attendance, apply the attendance enhancements:
 
 ```powershell
-# From frontend directory
+cd backend
+Get-Content src\database\attendance_enhancements.sql | mysql -u root -p workzen_hrms
+```
+
+## 2) Install dependencies
+
+Install backend deps and regenerate the lockfile (we removed the conflicting lockfile during merge):
+
+```powershell
+cd backend
+npm install
+
+# Frontend
 cd ../frontend
-npm run dev
-# Frontend should be running on http://localhost:5173
+npm install
 ```
 
-## 🎯 Test the Feature
+## 3) Start services
 
-1. **Open browser**: http://localhost:5173
-2. **Login** with your credentials
-3. **Click** "My Profile" button on dashboard
-4. **You should see** the profile page with Resume tab active
+Backend:
 
-## ✅ Quick Test Checklist
+```powershell
+cd backend
+npm start
+```
 
-- [ ] Can access `/profile` page
-- [ ] See profile avatar with initials
-- [ ] Resume tab is active by default
-- [ ] Can click "Edit Profile" button
-- [ ] Can edit text in About section
-- [ ] Can click "+ Add Skills"
-- [ ] Can save changes
-- [ ] Data persists after refresh
+Frontend:
 
-## 🐛 Quick Troubleshooting
+```powershell
+cd frontend
+npm run dev
+```
 
-### Problem: "Cannot read property of undefined"
+Open the app at http://localhost:5173 and log in.
 
-**Fix**: Make sure you're logged in and the token is valid
+## Quick tests
+- Visit /profile to validate My Profile UI and edit/save profile information.
+- Visit /attendance to validate attendance views (employee & admin flows).
 
-### Problem: Skills/Certifications not saving
-
-**Fix**: Check if database migration was applied successfully
-
-### Problem: Page is blank
-
-**Fix**: Check browser console for errors, verify API is running
-
-### Problem: Styles look broken
-
-**Fix**: Clear browser cache (Ctrl + Shift + R)
-
-## 📸 Expected Result
-
-Your profile page should look like the screenshot with:
-
-- ✅ Dark theme
-- ✅ Purple Odoo branding
-- ✅ Sidebar navigation
-- ✅ Tabbed interface
-- ✅ Two-column resume layout
-- ✅ Edit functionality
-
-## 🎉 Success!
-
-If you can see and edit your profile, the feature is working!
-
-**Next Steps**:
-
-- Add your real information
-- Upload profile picture (coming soon)
-- Explore other tabs
-- Test on mobile devices
+## Troubleshooting
+- If pages are blank, check browser console for JS errors and ensure backend API is running on port 5000.
+- If skills/certifications don't save, ensure the resume migration was applied and run the backend migration script.
 
 ---
 
-For detailed documentation, see:
+For more detailed feature docs see `MY_PROFILE_FEATURE.md` and `ATTENDANCE_FEATURE.md`.
 
-- `MY_PROFILE_FEATURE.md` - Feature details
-- `MY_PROFILE_SETUP.md` - Complete setup guide
-- `MY_PROFILE_OVERVIEW.md` - Technical overview
