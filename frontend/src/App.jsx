@@ -1,10 +1,16 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { AuthProvider } from './context/AuthContext';
-import ProtectedRoute from './components/ProtectedRoute';
-import SignIn from './pages/SignIn';
-import SignUp from './pages/SignUp';
-import Dashboard from './pages/Dashboard';
-import './styles/App.css';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
+import { AuthProvider } from "./context/AuthContext";
+import ProtectedRoute from "./components/ProtectedRoute";
+import SignIn from "./pages/SignIn";
+import SignUp from "./pages/SignUp";
+import Dashboard from "./pages/Dashboard";
+import MyProfile from "./pages/MyProfile";
+import "./styles/App.css";
 
 function App() {
   return (
@@ -21,12 +27,14 @@ function App() {
             <Route
               path="/dashboard"
               element={
-                <ProtectedRoute allowedRoles={['Admin', 'HR Officer', 'Payroll Officer']}>
+                <ProtectedRoute
+                  allowedRoles={["Admin", "HR Officer", "Payroll Officer"]}
+                >
                   <Dashboard />
                 </ProtectedRoute>
               }
             />
-            
+
             <Route
               path="/employee/dashboard"
               element={
@@ -36,18 +44,36 @@ function App() {
               }
             />
 
+            {/* My Profile Route */}
+            <Route
+              path="/profile"
+              element={
+                <ProtectedRoute>
+                  <MyProfile />
+                </ProtectedRoute>
+              }
+            />
+
             {/* 404 Page */}
-            <Route 
-              path="*" 
+            <Route
+              path="*"
               element={
                 <div className="auth-page">
                   <div className="auth-card text-center">
-                    <h1 style={{ fontSize: '72px', color: 'var(--odoo-purple)' }}>404</h1>
-                    <p style={{ fontSize: '20px', marginBottom: '20px' }}>Page Not Found</p>
-                    <a href="/login" className="btn btn-primary">Go to Login</a>
+                    <h1
+                      style={{ fontSize: "72px", color: "var(--odoo-purple)" }}
+                    >
+                      404
+                    </h1>
+                    <p style={{ fontSize: "20px", marginBottom: "20px" }}>
+                      Page Not Found
+                    </p>
+                    <a href="/login" className="btn btn-primary">
+                      Go to Login
+                    </a>
                   </div>
                 </div>
-              } 
+              }
             />
           </Routes>
         </div>
