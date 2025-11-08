@@ -1,11 +1,10 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
+import AttendanceRouter from './components/AttendanceRouter';
 import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
 import Dashboard from './pages/Dashboard';
-import Attendance from './pages/Attendance';
-import EmployeeAttendance from './pages/EmployeeAttendance';
 import './styles/App.css';
 
 function App() {
@@ -38,22 +37,12 @@ function App() {
               }
             />
 
-            {/* Attendance Route */}
+            {/* Attendance Route - Role-based routing */}
             <Route
               path="/attendance"
               element={
                 <ProtectedRoute>
-                  <Attendance />
-                </ProtectedRoute>
-              }
-            />
-
-            {/* Employee Attendance Route - Monthly View */}
-            <Route
-              path="/employee/attendance"
-              element={
-                <ProtectedRoute>
-                  <EmployeeAttendance />
+                  <AttendanceRouter />
                 </ProtectedRoute>
               }
             />

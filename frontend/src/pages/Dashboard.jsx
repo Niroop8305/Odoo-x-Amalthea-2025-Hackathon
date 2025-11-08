@@ -95,13 +95,21 @@ const Dashboard = () => {
   };
 
   const navItems = [
-    { id: 'employees', label: 'Employees', hasSubItems: false },
-    { id: 'attendance', label: 'Attendance', hasSubItems: false },
-    { id: 'timeoff', label: 'Time Off', hasSubItems: false },
-    { id: 'payroll', label: 'Payroll', hasSubItems: false },
-    { id: 'reports', label: 'Reports', hasSubItems: false },
-    { id: 'settings', label: 'Settings', hasSubItems: false },
+    { id: 'employees', label: 'Employees', hasSubItems: false, path: null },
+    { id: 'attendance', label: 'Attendance', hasSubItems: false, path: '/attendance' },
+    { id: 'timeoff', label: 'Time Off', hasSubItems: false, path: null },
+    { id: 'payroll', label: 'Payroll', hasSubItems: false, path: null },
+    { id: 'reports', label: 'Reports', hasSubItems: false, path: null },
+    { id: 'settings', label: 'Settings', hasSubItems: false, path: null },
   ];
+
+  const handleNavClick = (item) => {
+    if (item.path) {
+      navigate(item.path);
+    } else {
+      setActiveSection(item.id);
+    }
+  };
 
   return (
     <div className="dashboard-layout">
@@ -123,7 +131,7 @@ const Dashboard = () => {
             <button
               key={item.id}
               className={`nav-item ${activeSection === item.id ? 'active' : ''}`}
-              onClick={() => setActiveSection(item.id)}
+              onClick={() => handleNavClick(item)}
             >
               <span>{item.label}</span>
               {item.hasSubItems && <span className="nav-arrow">▼</span>}
