@@ -206,6 +206,22 @@
   font-size: 0.85rem;
 }
 
+.status-badge.pending {
+  background: rgba(255, 152, 0, 0.2);
+  color: #FF9800;
+  border: 1px solid #FF9800;
+  padding: 5px 15px;
+  font-size: 0.85rem;
+}
+
+.status-badge.draft {
+  background: rgba(158, 158, 158, 0.2);
+  color: #9e9e9e;
+  border: 1px solid #9e9e9e;
+  padding: 5px 15px;
+  font-size: 0.85rem;
+}
+
 /* Summary Stats */
 .summary-stats {
   display: grid;
@@ -842,7 +858,7 @@
 .btn-action {
   padding: 8px 20px;
   border: none;
-  border-radius: 6px;
+  border-radius: 12px;
   font-size: 0.9rem;
   font-weight: 500;
   cursor: pointer;
@@ -852,6 +868,7 @@
 .btn-new {
   background: #d946ef;
   color: white;
+  border-radius: 12px;
 }
 
 .btn-new:hover {
@@ -861,6 +878,7 @@
 .btn-compute {
   background: #9b59b6;
   color: white;
+  border-radius: 12px;
 }
 
 .btn-compute:hover {
@@ -868,26 +886,76 @@
 }
 
 .btn-validate {
-  background: #555;
+  background: #2a2a2a;
   color: white;
+  border-radius: 12px;
 }
 
-.btn-validate:hover {
-  background: #666;
+.btn-validate:hover:not(:disabled) {
+  background: #3a3a3a;
+}
+
+.btn-validate:disabled {
+  background: #4CAF50;
+  color: white;
+  cursor: not-allowed;
+  opacity: 0.9;
+}
+
+/* Validation Message Styles */
+.validation-message {
+  padding: 12px 20px;
+  border-radius: 8px;
+  margin: 15px 0;
+  font-size: 0.95rem;
+  font-weight: 500;
+  text-align: center;
+  animation: slideIn 0.3s ease-out;
+}
+
+.validation-message.success {
+  background: rgba(76, 175, 80, 0.15);
+  color: #4CAF50;
+  border: 1px solid #4CAF50;
+}
+
+.validation-message.error {
+  background: rgba(244, 67, 54, 0.15);
+  color: #f44336;
+  border: 1px solid #f44336;
+}
+
+.validation-message.info {
+  background: rgba(33, 150, 243, 0.15);
+  color: #2196F3;
+  border: 1px solid #2196F3;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .btn-cancel {
-  background: #666;
+  background: #2a2a2a;
   color: white;
+  border-radius: 12px;
 }
 
 .btn-cancel:hover {
-  background: #777;
+  background: #3a3a3a;
 }
 
 .btn-action.btn-print {
   background: #2a2a2a;
   color: white;
+  border-radius: 12px;
 }
 
 .btn-action.btn-print:hover {
@@ -1080,6 +1148,7 @@
   font-weight: 600;
   padding: 20px 15px;
   background: #252525;
+  color: #fff;
 }
 
 .pavan-badge {

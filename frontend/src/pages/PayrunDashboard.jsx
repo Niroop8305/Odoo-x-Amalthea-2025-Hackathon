@@ -117,6 +117,10 @@ const PayrunDashboard = () => {
   const [selectedPayslip, setSelectedPayslip] = useState(null);
   const [showPayslipModal, setShowPayslipModal] = useState(false);
   
+  // Validation state
+  const [isValidating, setIsValidating] = useState(false);
+  const [validationMessage, setValidationMessage] = useState('');
+  
   // Employee selection for modal compute
   const [selectedEmployeeForCompute, setSelectedEmployeeForCompute] = useState(null);
   
@@ -244,6 +248,76 @@ const PayrunDashboard = () => {
 
   const handlePrintPayslip = () => {
     window.print();
+  };
+
+  // Validate Payslip Handler with Loading & Feedback
+  const handleValidatePayslip = async () => {
+    if (!selectedPayslip?.id) {
+      setValidationMessage('❌ No payslip selected');
+      setTimeout(() => setValidationMessage(''), 3000);
+      return;
+    }
+
+    // Check if already validated
+    if (selectedPayslip.status === 'Done') {
+      setValidationMessage('ℹ️ This payslip is already validated');
+      setTimeout(() => setValidationMessage(''), 3000);
+      return;
+    }
+
+    if (!confirm('Are you sure you want to validate this payslip? This action will mark it as finalized.')) {
+      return;
+    }
+
+    // Start loading state
+    setIsValidating(true);
+    setValidationMessage('⏳ Validating payslip...');
+
+    try {
+      const response = await fetch(`http://localhost:5000/api/payslip/${selectedPayslip.id}/validate`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Failed to validate payslip');
+      }
+
+      // Update the selected payslip with validated data
+      setSelectedPayslip(data.payslip);
+
+      // Update the payslip in the payrun data list
+      if (payrunData?.payslips) {
+        const updatedPayslips = payrunData.payslips.map(p => 
+          p.id === selectedPayslip.id ? data.payslip : p
+        );
+        setPayrunData({
+          ...payrunData,
+          payslips: updatedPayslips
+        });
+      }
+
+      // Success message
+      setValidationMessage('✅ Payslip validated successfully!');
+      
+      // Clear message after 3 seconds
+      setTimeout(() => setValidationMessage(''), 3000);
+
+    } catch (err) {
+      // Error message
+      setValidationMessage(`❌ Error: ${err.message}`);
+      console.error('Validation error:', err);
+      
+      // Clear message after 5 seconds
+      setTimeout(() => setValidationMessage(''), 5000);
+    } finally {
+      // Stop loading state
+      setIsValidating(false);
+    }
   };
 
   // New Payslip Handlers
@@ -518,7 +592,9 @@ const PayrunDashboard = () => {
                       <td className="deductions">{formatCurrency(payslip.total_deductions)}</td>
                       <td className="net-salary">{formatCurrency(payslip.net_salary)}</td>
                       <td>
-                        <span className="status-badge done">✅ {payslip.status}</span>
+                        <span className={`status-badge ${payslip.status === 'Done' ? 'done' : payslip.status === 'Pending' ? 'pending' : 'draft'}`}>
+                          {payslip.status === 'Done' ? '✅' : payslip.status === 'Pending' ? '⏳' : '📝'} {payslip.status}
+                        </span>
                       </td>
                       <td>
                         <button 
@@ -699,10 +775,23 @@ const PayrunDashboard = () => {
               <div className="payslip-action-buttons">
                 <button className="btn-action btn-new" onClick={handleNewPayslip}>New Payslip</button>
                 <button className="btn-action btn-compute" onClick={handleComputeInModal}>Compute</button>
-                <button className="btn-action btn-validate">Validate</button>
+                <button 
+                  className="btn-action btn-validate" 
+                  onClick={handleValidatePayslip}
+                  disabled={selectedPayslip?.status === 'Done' || isValidating}
+                >
+                  {isValidating ? '⏳ Validating...' : selectedPayslip?.status === 'Done' ? '✅ Validated' : 'Validate'}
+                </button>
                 <button className="btn-action btn-cancel" onClick={handleCloseModal}>Cancel</button>
                 <button className="btn-action btn-print" onClick={handlePrintPayslip}>Print</button>
               </div>
+
+              {/* Validation Feedback Message */}
+              {validationMessage && (
+                <div className={`validation-message ${validationMessage.includes('✅') ? 'success' : validationMessage.includes('❌') ? 'error' : 'info'}`}>
+                  {validationMessage}
+                </div>
+              )}
 
               {/* Employee Selection */}
               <div className="employee-selection-section">

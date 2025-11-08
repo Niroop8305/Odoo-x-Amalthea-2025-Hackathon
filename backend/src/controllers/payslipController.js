@@ -376,6 +376,69 @@ class PayslipController {
       });
     }
   }
+
+  // 7. Validate Payslip (Mark as Done)
+  static async validatePayslip(req, res) {
+    const { id } = req.params;
+
+    try {
+      // Check if payslip exists
+      const [payslip] = await pool.query(
+        'SELECT id, status FROM payslips WHERE id = ?',
+        [id]
+      );
+
+      if (payslip.length === 0) {
+        return res.status(404).json({
+          success: false,
+          message: 'Payslip not found'
+        });
+      }
+
+      // Check if already validated
+      if (payslip[0].status === 'Done') {
+        return res.status(400).json({
+          success: false,
+          message: 'Payslip is already validated'
+        });
+      }
+
+      // Update status to Done
+      const [result] = await pool.query(
+        'UPDATE payslips SET status = ?, updated_at = NOW() WHERE id = ?',
+        ['Done', id]
+      );
+
+      if (result.affectedRows === 0) {
+        return res.status(500).json({
+          success: false,
+          message: 'Failed to validate payslip'
+        });
+      }
+
+      // Fetch updated payslip
+      const [updatedPayslip] = await pool.query(
+        `SELECT p.*, e.name as employee_name, e.emp_id as employee_id
+         FROM payslips p
+         JOIN employees e ON p.emp_id = e.id
+         WHERE p.id = ?`,
+        [id]
+      );
+
+      res.status(200).json({
+        success: true,
+        message: 'Payslip validated successfully',
+        payslip: updatedPayslip[0]
+      });
+    } catch (error) {
+      console.error('Error validating payslip:', error);
+      res.status(500).json({
+        success: false,
+        message: 'Failed to validate payslip',
+        error: error.message
+      });
+    }
+  }
 }
 
 export default PayslipController;

@@ -21,4 +21,7 @@ router.delete('/:id', PayslipController.deletePayslip);
 // 6. Get all payslips (with filters)
 router.get('/', PayslipController.getAllPayslips);
 
+// 7. Validate payslip (mark as Done)
+router.post('/:id/validate', PayslipController.validatePayslip);
+
 export default router;
