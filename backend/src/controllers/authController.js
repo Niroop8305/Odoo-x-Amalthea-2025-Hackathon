@@ -73,18 +73,22 @@ export const register = async (req, res) => {
     // JODO -> First two letters of first and last name
     // 2025 -> Year of joining
     // 0001 -> Serial number padded
-    const companyCode = (company_name || 'Odoo India').substring(0, 2).toUpperCase();
-    const firstNameInitials = (first_name || '').substring(0, 2).toUpperCase();
-    const lastNameInitials = (last_name || first_name || '').substring(0, 2).toUpperCase();
+    const companyCode = (company_name || "Odoo India")
+      .substring(0, 2)
+      .toUpperCase();
+    const firstNameInitials = (first_name || "").substring(0, 2).toUpperCase();
+    const lastNameInitials = (last_name || first_name || "")
+      .substring(0, 2)
+      .toUpperCase();
     const yearOfJoining = new Date().getFullYear();
-    const serialNumber = String(userId).padStart(4, '0');
+    const serialNumber = String(userId).padStart(4, "0");
     const employee_code = `${companyCode}${firstNameInitials}${lastNameInitials}${yearOfJoining}${serialNumber}`;
 
     // Create employee profile
     await EmployeeProfile.create({
       user_id: userId,
       employee_code,
-      company_name: company_name || 'Odoo India',
+      company_name: company_name || "Odoo India",
       first_name,
       last_name: last_name || null,
       phone: phone || null,

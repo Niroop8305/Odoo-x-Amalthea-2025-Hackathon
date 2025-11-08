@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+
 # Quick Start - My Profile Feature
 
 ## 🚀 Quick Setup (3 Steps)
@@ -30,11 +31,13 @@ SET skills = JSON_ARRAY(),
     certifications = JSON_ARRAY()
 WHERE skills IS NULL OR certifications IS NULL;
 ```
+
 # Quick Start - WorkZen
 
 This quick start covers both the My Profile feature and the Attendance feature so you can get the latest code running locally.
 
 ## Prerequisites
+
 - MySQL running and accessible
 - Node.js (>= 18) and npm installed
 
@@ -86,14 +89,15 @@ npm run dev
 Open the app at http://localhost:5173 and log in.
 
 ## Quick tests
+
 - Visit /profile to validate My Profile UI and edit/save profile information.
 - Visit /attendance to validate attendance views (employee & admin flows).
 
 ## Troubleshooting
+
 - If pages are blank, check browser console for JS errors and ensure backend API is running on port 5000.
 - If skills/certifications don't save, ensure the resume migration was applied and run the backend migration script.
 
 ---
 
 For more detailed feature docs see `MY_PROFILE_FEATURE.md` and `ATTENDANCE_FEATURE.md`.
-
